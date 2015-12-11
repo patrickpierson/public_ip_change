@@ -3,9 +3,10 @@ import argparse, boto3
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Updates DNS for an instance id entered.')
-    parser.add_argument('-id','--id', help='Instance ID that should be found', required=True)
-    parser.add_argument('-hostzone','--hostzone', help='Route53 zone being updated', required=True)
-    parser.add_argument('-hostname','--hostname', help='Route53 hostname being updated', required=True)
+    parser.add_argument('-lookup', '--lookup', help='Lookup Hostzones available', action='store_true')
+    parser.add_argument('-id','--id', help='Instance ID that should be found')
+    parser.add_argument('-hostzone','--hostzone', help='Route53 zone being updated')
+    parser.add_argument('-hostname','--hostname', help='Route53 hostname being updated')
     args = vars(parser.parse_args())
     return args
 
@@ -25,6 +26,16 @@ def update_host(args):
     route53.change_resource_record_sets(HostedZoneId=hosted_zone, ChangeBatch=changeBatch)
     print('Setting %s to %s' % (instance_publicip, instance_hostname))
 
+def print_hostszones():
+    route53 = boto3.client('route53')
+    hosted_zones = route53.list_hosted_zones()
+    for i in hosted_zones['HostedZones']:
+        print i['Id'] + ' : ' + i['Name']
+
 if __name__ == '__main__':
     args = parse_args()
-    update_host(args)
+
+    if args['lookup']:
+        print_hostszones()
+    else:
+        update_host(args)
