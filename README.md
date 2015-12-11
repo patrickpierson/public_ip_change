@@ -1,6 +1,5 @@
 ## Update instance hostname with Public IP
 
-### Needed
 **Instance ID** - The instance ID is a unique identifier that is found via the EC2 console. 
 ```
 i-XXXXXXX
@@ -16,7 +15,7 @@ i-XXXXXXX
 hostname.domain.com.
 ```
 
-Run the following:
+### Run the following:
 ```
 ./public_ip_change.py --id i-12345678 --hostzone Z123P456F789Z3 --hostname hostname.domain.com.
 ```
